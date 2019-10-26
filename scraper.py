@@ -32,7 +32,7 @@ def getMonthAsDigits(m):
 # get data from playlists
 def get_playlist_data(dj_id, playlist_id):
 	# open database
-	db = sqlite3.connect('testdb2.sqlite3')
+	db = sqlite3.connect('testdb.sqlite3')
 	cursor = db.cursor()
 
 	# open playlist page by show_id
@@ -138,7 +138,7 @@ def get_show_info(id):
 # get all playlists for a particular DJ
 def get_dj_playlists(dj_id):
 	# open database & initialize dictionary to feed records
-	db = sqlite3.connect('testdb2.sqlite3')
+	db = sqlite3.connect('testdb.sqlite3')
 	cursor = db.cursor()
 	ids = []
 
@@ -190,7 +190,7 @@ def get_all_playlists(dj_id):
 # updates starting with most recent playlist and counting backwards until it crashes
 def get_new_playlists():
 	# open database & initialize dictionary to feed records
-	db = sqlite3.connect('testdb2.sqlite3')
+	db = sqlite3.connect('testdb.sqlite3')
 	cursor = db.cursor()
 
 	soup = BeautifulSoup(requests.get("http://wprb.com/playlists/recentplaylists/").text, 'html.parser')
