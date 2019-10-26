@@ -187,36 +187,32 @@ def get_all_playlists(dj_id):
 	# trim log to the true upper limit
 	print("END - Ended test at DJ %d" % (dj_id))
 
-# one more method for last 10 days to update
+# updates starting with most recent playlist and counting backwards until it crashes
 def get_new_playlists():
 	# open database & initialize dictionary to feed records
 	db = sqlite3.connect('testdb2.sqlite3')
 	cursor = db.cursor()
 
 	soup = BeautifulSoup(requests.get("http://wprb.com/playlists/recentplaylists/").text, 'html.parser')
-
-	for a in soup.findAll('div', class_='recentplaylists')[0].findAll('a'):
-		id = a.get('href').split('=')[1]
-
+	id = soup.findAll('div', class_='recentplaylists')[0].findAll('a')[0].get('href').split('=')[1].strip('u')
+	
+	while(id):	# while (id not in db)
 		data = get_show_info(id)
-		
+	
 		get_playlist_data(data['dj_id'], data['id'])
-
-		print(data)
 		
 		# check unique constraints
 		cursor.execute('INSERT INTO playlists VALUES (:dj_id, :dj_name, :id, :start_time, :end_time, :day, :program_name, :subtitle, :genre, :description)', data)
 		db.commit()
-		
+		id = int(id) - 1
+
 	db.close()
 
-# update function will go here
 
 # main logic goes HERE
 
+# to fill database from oldest to newest
+# get_all_playlists(1)
+
+# to update database from newest to oldest
 # get_new_playlists()
-# get_show_info(46589)
-# get_dj_playlists(120)
-# playlists = get_playlist_data(40416)
-# for testing -  get_all_playlists(1)
-# get_playlist_data(600, 46371)
